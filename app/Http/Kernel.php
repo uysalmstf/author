@@ -23,6 +23,9 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
         \App\Http\Middleware\ForceJsonResponse::class,
         \App\Http\Middleware\Cors::class,
+        \App\Http\Middleware\AdminAuth::class,
+        \App\Http\Middleware\ModeratorAuth::class,
+        \App\Http\Middleware\WriterAuth::class,
 
     ];
 
@@ -68,5 +71,8 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'json.response' => \App\Http\Middleware\ForceJsonResponse::class,
         'cors' => \App\Http\Middleware\Cors::class,
+        'api.admin' => \App\Http\Middleware\AdminAuth::class,
+        'api.moderator' => \App\Http\Middleware\ModeratorAuth::class,
+        'api.writer' => \App\Http\Middleware\WriterAuth::class,
     ];
 }
