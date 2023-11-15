@@ -20,7 +20,7 @@ class WriterAuth
         if (Auth::guard('api')->check() && $request->user()->type >= 3) {
             return $next($request);
         } else {
-            $message = ["message" => "Permission Denied"];
+            $message = ["message" => "Permission Denied writer"];
             return response($message, 401);
         }
     }

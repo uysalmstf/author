@@ -23,9 +23,6 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
         \App\Http\Middleware\ForceJsonResponse::class,
         \App\Http\Middleware\Cors::class,
-        \App\Http\Middleware\AdminAuth::class,
-        \App\Http\Middleware\ModeratorAuth::class,
-        \App\Http\Middleware\WriterAuth::class,
 
     ];
 

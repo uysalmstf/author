@@ -16,6 +16,12 @@ class BlogController extends Controller
         //
     }
 
+    public function list()
+    {
+        $response = ['message' =>  'list function'];
+        return response($response, 200);
+    }
+
     /**
      * Show the form for creating a new resource.
      *

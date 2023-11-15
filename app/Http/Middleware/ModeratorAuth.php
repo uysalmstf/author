@@ -20,7 +20,7 @@ class ModeratorAuth
         if (Auth::guard('api')->check() && $request->user()->type >= 2) {
             return $next($request);
         } else {
-            $message = ["message" => "Permission Denied"];
+            $message = ["message" => "Permission Denied moderator"];
             return response($message, 401);
         }
     }
