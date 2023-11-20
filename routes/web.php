@@ -30,5 +30,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/reader', [HomeController::class, 'reader'])->name('reader');
     Route::get('/blogs/add', [BlogController::class, 'add']);
     Route::post('/blogs/create', [BlogController::class, 'create']);
+    Route::get('/blogs/read/{id}', [BlogController::class, 'read']);
+    Route::get('/blogs/edit/{id}', [BlogController::class, 'edit']);
+    Route::post('/blogs/update/{id}', [BlogController::class, 'update']);
 
 });

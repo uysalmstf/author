@@ -153,7 +153,7 @@ class HomeController extends Controller
                 if ($blog->user->id == Auth::user()->id) {
                     if (Auth::user()->type != 0) {
 
-                        $bl['actions'] .= '<a href="/blogs_edit/'.$blog->id.'" class="btn btn-warning">Düzenle</a>';
+                        $bl['actions'] .= '<a href="blogs/edit/'.$blog->id.'" class="btn btn-warning">Düzenle</a>';
 
                     }
                 }

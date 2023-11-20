@@ -82,7 +82,7 @@ class BlogController extends Controller
     {
             $blog = Blog::where('id', $id)->first();
 
-        return view('blog.edit', array('data' => $blog));
+        return view('blog.edit', array('data' => $blog, 'title' => 'Blog Editleme'));
     }
 
     /**
@@ -94,7 +94,17 @@ class BlogController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $validatedData = $request->validate([
+            'title' => 'required|max:255',
+            'body' => 'required',
+        ]);
+
+        $post = Blog::find($id);
+        $post->publish = $request->get('publish');
+        $post->status = $request->get('status');
+        $post->update($validatedData);
+        
+        return redirect('/');
     }
 
     /**
@@ -103,8 +113,11 @@ class BlogController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function read($id)
     {
-        //
+        $blog = Blog::where('id', $id)->first();
+        $blog->view += 1;
+        $blog->save();
+        return view('blog.edit', array('data' => $blog, 'title' => 'Blog Editleme'));
     }
 }
