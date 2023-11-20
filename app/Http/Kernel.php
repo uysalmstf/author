@@ -3,6 +3,10 @@
 namespace App\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
+use App\Http\Middleware\AdminMiddleware;
+use App\Http\Middleware\ModeratorMiddleware;
+use App\Http\Middleware\RoleMiddleware;
+use App\Http\Middleware\WriterMiddleware;
 
 class Kernel extends HttpKernel
 {
@@ -71,5 +75,9 @@ class Kernel extends HttpKernel
         'api.admin' => \App\Http\Middleware\AdminAuth::class,
         'api.moderator' => \App\Http\Middleware\ModeratorAuth::class,
         'api.writer' => \App\Http\Middleware\WriterAuth::class,
+        'role' => RoleMiddleware::class,
+        'admin' => AdminMiddleware::class,
+        'moderator' => ModeratorMiddleware::class,
+        'writer' => WriterMiddleware::class,
     ];
 }

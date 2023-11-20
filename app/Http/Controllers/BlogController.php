@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Blog;
 use Illuminate\Http\Request;
 
 class BlogController extends Controller
@@ -11,9 +12,9 @@ class BlogController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function add()
     {
-        //
+        return view('blog.add', array('title' => 'Blog Ekleme'));
     }
 
     public function list()
@@ -27,10 +28,26 @@ class BlogController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        $response = ['message' =>  'create function'];
-        return response($response, 200);
+        $validatedData = $request->validate([
+            'title' => 'required|max:255',
+            'body' => 'required',
+        ]);
+
+        // Kullanıcının ilişkilendirilmiş modelini al
+        $user = auth()->user();
+
+        // Blog yazısı oluştur ve ilişkilendir
+        $post = new Blog($validatedData);
+        if ($user->blog()->save($post)) {
+            $post->publish = 0;
+            $post->view = 0;
+            $post->status = 1;
+
+            return redirect('/');
+        }
+        return redirect('/');
     }
 
     /**
@@ -63,7 +80,9 @@ class BlogController extends Controller
      */
     public function edit($id)
     {
-        //
+            $blog = Blog::where('id', $id)->first();
+
+        return view('blog.edit', array('data' => $blog));
     }
 
     /**
