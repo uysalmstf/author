@@ -54,6 +54,8 @@ class HomeController extends Controller
     }
     
     public function admin() {
+        $blogs = Redis::hGetAll('blogs');
+        if($blogs == null) {
             $blogs = Blog::where('status', 1)->get();
 
             $blogArr = array();
@@ -62,19 +64,16 @@ class HomeController extends Controller
                 $bl['id'] = $blog->id;
                 $bl['title'] = $blog->title;
                 $bl['status'] = $blog->status;
+                $bl['view'] = $blog->view;
+                $bl['vote'] = $this->voteCalculate($blog->votes);
                 $bl['publish'] = $blog->publish;
                 $bl['user'] = $blog->user->name;
-                $bl['actions'] = '<a href="'.route('read').'/'.$blog->id.'" class="btn btn-info">Oku</a>';
+                $bl['actions'] = '<a href="blogs/read/'.$blog->id.'" class="btn btn-info">Oku</a>';
 
                 if ($blog->user->id == Auth::user()->id) {
                     if (Auth::user()->type != 0) {
-                        if ($blog->publish == 1) {
-                            $bl['actions'] .= '<a onclick="publish('.$blog->id.', '.$blog->publish.')" class="btn btn-warning yayin'.$blog->id.'">Yayından Kaldır</a>';
-                        } else {
-                            $bl['actions'] .= '<a onclick="publish('.$blog->id.', '.$blog->publish.')" class="btn btn-warning yayin'.$blog->id.'">Yayına Al</a>';
-                        }
 
-                        $bl['actions'] .= '<a href="'.route('edit').'/'.$blog->id.'" class="btn btn-info">Düzenle</a>';
+                        $bl['actions'] .= '<a href="blogs/edit/'.$blog->id.'" class="btn btn-warning">Düzenle</a>';
 
                     }
                 }
@@ -82,8 +81,35 @@ class HomeController extends Controller
                 $blogArr[] = $bl;
 
             }
+        } else {
 
-        
+            $blogArr = array();
+            foreach ($blogs as $key => $blog) {
+               
+                $blog = json_decode($blog);
+                $blogVotes = Vote::where('blog_id', $blog->id)->get();
+                $blogUser = User::where('id', $blog->user_id)->first();
+
+                $bl['id'] = $blog->id;
+                $bl['title'] = $blog->title;
+                $bl['status'] = $blog->status;
+                $bl['view'] = $blog->view;
+                $bl['vote'] = $this->voteCalculate($blogVotes);
+                $bl['publish'] = $blog->publish;
+                $bl['user'] = $blogUser->name;
+                $bl['actions'] = '<a href="blogs/read/'.$blog->id.'" class="btn btn-info">Oku</a>';
+
+                if ($blogUser->id == Auth::user()->id) {
+                    if (Auth::user()->type != 0) {
+
+                        $bl['actions'] .= '<a href="blogs/edit/'.$blog->id.'" class="btn btn-warning">Düzenle</a>';
+
+                    }
+                }
+
+                $blogArr[] = $bl;
+            }
+        }
 
         $isOKForCreate = false;
         if (Auth::user()->type != 0) {
@@ -97,6 +123,8 @@ class HomeController extends Controller
 
     public function moderator() {
 
+        $blogs = Redis::hGetAll('blogs');
+        if($blogs == null) {
             $blogs = Blog::where('status', 1)->get();
 
             $blogArr = array();
@@ -105,19 +133,16 @@ class HomeController extends Controller
                 $bl['id'] = $blog->id;
                 $bl['title'] = $blog->title;
                 $bl['status'] = $blog->status;
+                $bl['view'] = $blog->view;
+                $bl['vote'] = $this->voteCalculate($blog->votes);
                 $bl['publish'] = $blog->publish;
                 $bl['user'] = $blog->user->name;
-                $bl['actions'] = '<a href="'.route('read').'/'.$blog->id.'" class="btn btn-info">Oku</a>';
+                $bl['actions'] = '<a href="blogs/read/'.$blog->id.'" class="btn btn-info">Oku</a>';
 
                 if ($blog->user->id == Auth::user()->id) {
                     if (Auth::user()->type != 0) {
-                        if ($blog->publish == 1) {
-                            $bl['actions'] .= '<a onclick="publish('.$blog->id.', '.$blog->publish.')" class="btn btn-warning yayin'.$blog->id.'">Yayından Kaldır</a>';
-                        } else {
-                            $bl['actions'] .= '<a onclick="publish('.$blog->id.', '.$blog->publish.')" class="btn btn-warning yayin'.$blog->id.'">Yayına Al</a>';
-                        }
 
-                        $bl['actions'] .= '<a href="'.route('edit').'/'.$blog->id.'" class="btn btn-info">Düzenle</a>';
+                        $bl['actions'] .= '<a href="blogs/edit/'.$blog->id.'" class="btn btn-warning">Düzenle</a>';
 
                     }
                 }
@@ -125,8 +150,35 @@ class HomeController extends Controller
                 $blogArr[] = $bl;
 
             }
+        } else {
 
-        
+            $blogArr = array();
+            foreach ($blogs as $key => $blog) {
+               
+                $blog = json_decode($blog);
+                $blogVotes = Vote::where('blog_id', $blog->id)->get();
+                $blogUser = User::where('id', $blog->user_id)->first();
+
+                $bl['id'] = $blog->id;
+                $bl['title'] = $blog->title;
+                $bl['status'] = $blog->status;
+                $bl['view'] = $blog->view;
+                $bl['vote'] = $this->voteCalculate($blogVotes);
+                $bl['publish'] = $blog->publish;
+                $bl['user'] = $blogUser->name;
+                $bl['actions'] = '<a href="blogs/read/'.$blog->id.'" class="btn btn-info">Oku</a>';
+
+                if ($blogUser->id == Auth::user()->id) {
+                    if (Auth::user()->type != 0) {
+
+                        $bl['actions'] .= '<a href="blogs/edit/'.$blog->id.'" class="btn btn-warning">Düzenle</a>';
+
+                    }
+                }
+
+                $blogArr[] = $bl;
+            }
+        }
 
         $isOKForCreate = false;
         if (Auth::user()->type != 0) {
@@ -173,7 +225,7 @@ class HomeController extends Controller
 
         $blogs = Redis::hGetAll('blogs');
         if($blogs == null) {
-            $blogs = Blog::where('status', 1)->get()->toArray();
+            $blogs = Blog::where('status', 1)->get();
 
             $blogArr = array();
             foreach ($blogs as $blog) {
@@ -240,6 +292,8 @@ class HomeController extends Controller
 
     public function reader() {
 
+        $blogs = Redis::hGetAll('blogs');
+        if($blogs == null) {
             $blogs = Blog::where('status', 1)->get();
 
             $blogArr = array();
@@ -248,15 +302,16 @@ class HomeController extends Controller
                 $bl['id'] = $blog->id;
                 $bl['title'] = $blog->title;
                 $bl['status'] = $blog->status;
+                $bl['view'] = $blog->view;
+                $bl['vote'] = $this->voteCalculate($blog->votes);
                 $bl['publish'] = $blog->publish;
                 $bl['user'] = $blog->user->name;
-                $bl['actions'] = '<a href="'.route('read').'/'.$blog->id.'" class="btn btn-info">Oku</a>';
+                $bl['actions'] = '<a href="blogs/read/'.$blog->id.'" class="btn btn-info">Oku</a>';
 
                 if ($blog->user->id == Auth::user()->id) {
                     if (Auth::user()->type != 0) {
 
-
-                        $bl['actions'] .= '<a href="'.route('edit').'/'.$blog->id.'" class="btn btn-info">Düzenle</a>';
+                        $bl['actions'] .= '<a href="blogs/edit/'.$blog->id.'" class="btn btn-warning">Düzenle</a>';
 
                     }
                 }
@@ -264,8 +319,36 @@ class HomeController extends Controller
                 $blogArr[] = $bl;
 
             }
+        } else {
 
-        
+            $blogArr = array();
+            foreach ($blogs as $key => $blog) {
+               
+                $blog = json_decode($blog);
+                $blogVotes = Vote::where('blog_id', $blog->id)->get();
+                $blogUser = User::where('id', $blog->user_id)->first();
+
+                $bl['id'] = $blog->id;
+                $bl['title'] = $blog->title;
+                $bl['status'] = $blog->status;
+                $bl['view'] = $blog->view;
+                $bl['vote'] = $this->voteCalculate($blogVotes);
+                $bl['publish'] = $blog->publish;
+                $bl['user'] = $blogUser->name;
+                $bl['actions'] = '<a href="blogs/read/'.$blog->id.'" class="btn btn-info">Oku</a>';
+
+                if ($blogUser->id == Auth::user()->id) {
+                    if (Auth::user()->type != 0) {
+
+                        $bl['actions'] .= '<a href="blogs/edit/'.$blog->id.'" class="btn btn-warning">Düzenle</a>';
+
+                    }
+                }
+
+                $blogArr[] = $bl;
+            }
+        }
+
         $isOKForCreate = false;
         if (Auth::user()->type != 0) {
             $isOKForCreate = true;
