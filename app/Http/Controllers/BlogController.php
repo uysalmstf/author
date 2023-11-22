@@ -118,6 +118,6 @@ class BlogController extends Controller
         $blog = Blog::where('id', $id)->first();
         $blog->view += 1;
         $blog->save();
-        return view('blog.edit', array('data' => $blog, 'title' => 'Blog Editleme'));
+        return view('blog.read', array('data' => $blog, 'title' => 'Blog Editleme'));
     }
 }
