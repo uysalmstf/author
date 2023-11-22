@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Blog;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redis;
 
 class BlogController extends Controller
 {
@@ -44,7 +45,7 @@ class BlogController extends Controller
             $post->publish = 0;
             $post->view = 0;
             $post->status = 1;
-
+            Redis::hSet('blogs', $post->id, json_encode($post));
             return redirect('/');
         }
         return redirect('/');
@@ -103,7 +104,7 @@ class BlogController extends Controller
         $post->publish = $request->get('publish');
         $post->status = $request->get('status');
         $post->update($validatedData);
-        
+        Redis::hSet('blogs', $post->id, json_encode($post));
         return redirect('/');
     }
 
@@ -118,6 +119,7 @@ class BlogController extends Controller
         $blog = Blog::where('id', $id)->first();
         $blog->view += 1;
         $blog->save();
+        Redis::hSet('blogs', $id, json_encode($blog));
         return view('blog.read', array('data' => $blog, 'title' => 'Blog Editleme'));
     }
 }

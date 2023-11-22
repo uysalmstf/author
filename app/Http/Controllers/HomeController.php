@@ -7,6 +7,7 @@ use App\Models\Blog;
 use App\Models\User;
 use App\Models\Vote;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redis;
 
 class HomeController extends Controller
 {
@@ -169,7 +170,10 @@ class HomeController extends Controller
     }
 
     public function writer() {
-            $blogs = Blog::where('status', 1)->get();
+
+        $blogs = Redis::hGetAll('blogs');
+        if($blogs == null) {
+            $blogs = Blog::where('status', 1)->get()->toArray();
 
             $blogArr = array();
             foreach ($blogs as $blog) {
@@ -194,8 +198,35 @@ class HomeController extends Controller
                 $blogArr[] = $bl;
 
             }
+        } else {
 
-        
+            $blogArr = array();
+            foreach ($blogs as $key => $blog) {
+               
+                $blog = json_decode($blog);
+                $blogVotes = Vote::where('blog_id', $blog->id)->get();
+                $blogUser = User::where('id', $blog->user_id)->first();
+
+                $bl['id'] = $blog->id;
+                $bl['title'] = $blog->title;
+                $bl['status'] = $blog->status;
+                $bl['view'] = $blog->view;
+                $bl['vote'] = $this->voteCalculate($blogVotes);
+                $bl['publish'] = $blog->publish;
+                $bl['user'] = $blogUser->name;
+                $bl['actions'] = '<a href="blogs/read/'.$blog->id.'" class="btn btn-info">Oku</a>';
+
+                if ($blogUser->id == Auth::user()->id) {
+                    if (Auth::user()->type != 0) {
+
+                        $bl['actions'] .= '<a href="blogs/edit/'.$blog->id.'" class="btn btn-warning">Düzenle</a>';
+
+                    }
+                }
+
+                $blogArr[] = $bl;
+            }
+        }
 
         $isOKForCreate = false;
         if (Auth::user()->type != 0) {
