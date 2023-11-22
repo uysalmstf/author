@@ -5,6 +5,9 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\VoteController;
+use App\Http\Middleware\AdminMiddleware;
+use App\Http\Middleware\ModeratorMiddleware;
+use App\Http\Middleware\WriterMiddleware;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,9 +28,9 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/', [HomeController::class, 'admin'])
         ->middleware(\App\Http\Middleware\RoleMiddleware::class)->name('anasayfa');
-    Route::get('/admin', [HomeController::class, 'admin'])->middleware('admin')->name('admin');
-    Route::get('/moderator', [HomeController::class, 'moderator'])->name('moderator');
-    Route::get('/writer', [HomeController::class, 'writer'])->name('writer');
+    Route::get('/admin', [HomeController::class, 'admin'])->middleware(AdminMiddleware::class)->name('admin');
+    Route::get('/moderator', [HomeController::class, 'moderator'])->middleware(ModeratorMiddleware::class)->name('moderator');
+    Route::get('/writer', [HomeController::class, 'writer'])->middleware(WriterMiddleware::class)->name('writer');
     Route::get('/reader', [HomeController::class, 'reader'])->name('reader');
     Route::get('/blogs/add', [BlogController::class, 'add']);
     Route::post('/blogs/create', [BlogController::class, 'create']);
