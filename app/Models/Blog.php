@@ -17,7 +17,7 @@ class Blog extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function vote()
+    public function votes()
     {
         return $this->hasMany(Vote::class);
     }

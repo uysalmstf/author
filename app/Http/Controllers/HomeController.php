@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Blog;
 use App\Models\User;
+use App\Models\Vote;
 use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
@@ -136,6 +137,37 @@ class HomeController extends Controller
             'create' => $isOKForCreate));
     }
 
+    public function voteCalculate($votes) {
+
+        $total = 0;
+        $result = 0;
+        $totalVotes = count($votes);
+
+        if (count($votes) > 0) {
+            foreach ($votes as $key => $vote) {
+                $total += $vote->vote;
+            }
+    
+            if (count($votes) > 2) {
+                $limit = count($votes) % 3;
+                if ($limit == 0) {
+                    $limit = 1;
+                }
+
+                $lastVote = Vote::where('blog_id', $vote->blog_id)
+                            ->orderBy('created_at', 'desc')->take($limit)->get();
+                foreach ($lastVote as $key => $lv) {
+                    $total += $lv->vote;
+                    $totalVotes++;
+
+                }      
+            }
+            $result = $total / $totalVotes;
+        }
+        
+        return $result;
+    }
+
     public function writer() {
             $blogs = Blog::where('status', 1)->get();
 
@@ -146,6 +178,7 @@ class HomeController extends Controller
                 $bl['title'] = $blog->title;
                 $bl['status'] = $blog->status;
                 $bl['view'] = $blog->view;
+                $bl['vote'] = $this->voteCalculate($blog->votes);
                 $bl['publish'] = $blog->publish;
                 $bl['user'] = $blog->user->name;
                 $bl['actions'] = '<a href="blogs/read/'.$blog->id.'" class="btn btn-info">Oku</a>';

@@ -14,7 +14,7 @@ class VoteController extends Controller
         
         $validatedData['vote'] = $request->vote;
         $vote = new Vote($validatedData);
-        $blog->vote()->save($vote);
+        $blog->votes()->save($vote);
 
         return redirect('/blogs/read/' . $blog->id);
     }

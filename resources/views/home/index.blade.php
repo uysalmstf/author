@@ -56,6 +56,7 @@
                             <th>Title</th>
                             <th>User</th>
                             <th>View</th>
+                            <th>Vote</th>
                             <th>Publish</th>
                             <th>Process</th>
                         </tr>
@@ -67,6 +68,7 @@
                                 <td><?=$bl['title']?></td>
                                 <td><?=$bl['user']?></td>
                                 <td><?=$bl['view']?></td>
+                                <td><?=$bl['vote']?></td>
                                 <td>
                                     @if($bl['publish'] == 1)
                                     <span class="alert alert-success">Yayında</span>
