@@ -57,7 +57,13 @@
                     </div>
                     <div class="part">
                         <p>Oylama </p>
-                        <div class="stars rate" data-percent="0"><a href="?1" title="awful">★</a><a href="?2" title="ok">★</a><a href="?3" title="good">★</a><a href="?4" title="great">★</a><a href="?5" title="awesome">★</a></div><br>
+                        <div class="stars rate" data-percent="0">
+                            <a href="http://localhost:8008/author/public/vote/<?=$data->id?>/1" title="awful">★</a>
+                            <a href="http://localhost:8008/author/public/vote/<?=$data->id?>/2" title="ok">★</a>
+                            <a href="http://localhost:8008/author/public/vote/<?=$data->id?>/3" title="good">★</a>
+                            <a href="http://localhost:8008/author/public/vote/<?=$data->id?>/4" title="great">★</a>
+                            <a href="http://localhost:8008/author/public/vote/<?=$data->id?>/5" title="awesome">★</a>
+                        </div>
                     </div>
 
             </div>

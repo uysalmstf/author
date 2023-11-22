@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\VoteController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,5 +34,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/blogs/read/{id}', [BlogController::class, 'read']);
     Route::get('/blogs/edit/{id}', [BlogController::class, 'edit']);
     Route::post('/blogs/update/{id}', [BlogController::class, 'update']);
+
+
+    Route::get('/vote/{id}/{vote}', [VoteController::class, 'vote']);
 
 });
