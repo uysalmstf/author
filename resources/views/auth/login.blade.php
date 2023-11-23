@@ -9,9 +9,12 @@
   <body>
     <div class="container">
         <div class="card">
-            <div class="card-header">Login</div>
+            <div class="card-header">
+                Login
+                <a href="{{route('auth.register')}}" class="btn btn-info">Kayıt Ol</a>
+            </div>
             <div class="card-body">
-                <form action="http://localhost:8008/author/public/auth/login" method="post">
+                <form action="/auth/login" method="post">
                     @csrf
                 <div class="row">
                     <div class="form-group">
