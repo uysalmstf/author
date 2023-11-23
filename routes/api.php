@@ -15,7 +15,7 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
         // our routes to be protected will go in here
         Route::post('/logout', [ApiAuthController::class, 'logout'])->name('logout.api');
 
-        Route::get('/blogs', [BlogController::class, 'list'])->name('blogs_list.api');
+        Route::get('/blogs', [BlogController::class, 'list_api'])->name('blogs_list.api');
         Route::post('/blogs/create', [BlogController::class, 'insert'])->name('blogs_create.api');
         Route::post('/blogs/edit', [BlogController::class, 'edit_api'])->name('blogs_edit.api');
     });

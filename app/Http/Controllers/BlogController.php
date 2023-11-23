@@ -100,6 +100,33 @@ class BlogController extends Controller
         return response(array('status' => true), 200);
     }
 
+    public function list_api() {
+        $blogs = Redis::hGetAll('blogs');
+
+        $blogArr = [];
+        if ($blogs != null) {
+            foreach ($blogs as $blog) {
+               
+                $blog = json_decode($blog);
+
+                if ($blog->status == 0) {
+                    continue;
+                }
+                if ($blog->publish == 0) {
+                    continue;
+                }
+
+                $b['id'] = $blog->id;
+                $b['title'] = $blog->title;
+                $b['body'] = $blog->body;
+
+                $blogArr[] = $b;
+            }
+        }
+
+        return response($blogArr, 200);
+    }
+
     public function list()
     {
         $blogs = Redis::hGetAll('blogs');
