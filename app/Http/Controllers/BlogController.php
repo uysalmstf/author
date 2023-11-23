@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Blog;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redis;
 
 class BlogController extends Controller
@@ -16,6 +17,56 @@ class BlogController extends Controller
     public function add()
     {
         return view('blog.add', array('title' => 'Blog Ekleme'));
+    }
+
+    public function insert(Request $request) {
+        $validatedData = $request->validate([
+            'title' => 'required|max:255',
+            'body' => 'required',
+        ]);
+
+        if (isset($validatedData['errors']) && $validatedData['errors'] != null) {
+            return response(array('status' => false, 'message' => $validatedData['message']), 200);
+        }
+        $user = Auth::user();
+
+        // Yeni bir blog oluştur
+        $post = new Blog($validatedData);
+        if ($user->blog()->save($post)) {
+            $post->publish = 0;
+            $post->view = 0;
+            $post->status = 1;
+            Redis::hSet('blogs', $post->id, json_encode($post));
+            return response(array('status' => true), 200);
+        }
+
+    }
+
+    public function edit_api(Request $request) {
+
+        $validatedData = $request->validate([
+            'title' => 'required|max:255',
+            'body' => 'required',
+            'id' => 'required',
+            'status' => 'required',
+            'publish' => 'required',
+        ]);
+        
+        if (isset($validatedData['errors']) && $validatedData['errors'] != null) {
+            return response(array('status' => false, 'message' => $validatedData['message']), 200);
+        }
+
+        $post = Blog::find($request->id);
+
+        $post->title = $request->title;
+        $post->body = $request->body;
+        $post->publish = $request->publish;
+        $post->status = $request->status;
+        $post->update();
+
+        Redis::hSet('blogs', $post->id, json_encode($post));
+        
+        return response(array('status' => true), 200);
     }
 
     public function list()
