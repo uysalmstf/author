@@ -21,15 +21,17 @@ use App\Http\Middleware\WriterMiddleware;
 |
 */
 
-Route::get('/auth/login', [AuthController::class, 'index'])->name('login');
-Route::post('/auth/login', [AuthController::class, 'login']);
+Route::get('/auth/login', [AuthController::class, 'index'])->name('auth.login');
+Route::post('/auth/login', [AuthController::class, 'login'])->name('auth.login.post');
 
+Route::get('/blogs', [BlogController::class, 'list'])->name('blogs');
+Route::get('/blogs/read_me/{id}', [BlogController::class, 'main_read'])->name('main.read');
 
 Route::get('/register', [UserController::class, 'index'])->name('auth.register');
 Route::post('/register', [UserController::class, 'register'])->name('auth.register.post');
 
 Route::group(['middleware' => 'auth'], function () {
-    Route::get('/auth/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('/auth/logout', [AuthController::class, 'logout'])->name('auth.logout');
 
     Route::get('/', [HomeController::class, 'admin'])
         ->middleware(\App\Http\Middleware\RoleMiddleware::class)->name('anasayfa');

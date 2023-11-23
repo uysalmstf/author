@@ -71,8 +71,56 @@ class BlogController extends Controller
 
     public function list()
     {
-        $response = ['message' =>  'list function'];
-        return response($response, 200);
+        $blogs = Redis::hGetAll('blogs');
+
+        $blogArr = [];
+        if ($blogs != null) {
+            foreach ($blogs as $blog) {
+               
+                $blog = json_decode($blog);
+
+                if ($blog->status == 0) {
+                    continue;
+                }
+                if ($blog->publish == 0) {
+                    continue;
+                }
+
+                $b['id'] = $blog->id;
+                $b['title'] = $blog->title;
+                $b['body'] = $blog->body;
+
+                $blogArr[] = $b;
+            }
+        }
+
+        $isLogin = false;
+        if (Auth::check()) {
+            $isLogin = true;
+        }
+        
+        return view('blog.list', array('blogs' => $blogArr, 'isLogin' => $isLogin));
+    }
+
+    public function main_read($id) {
+
+        $blog = Blog::find($id);
+        $blog->view += 1;
+        $blog->update();
+
+        $blog = Redis::hGet('blogs', $id);
+        $blog = json_decode($blog);
+        $blog->view += 1;
+        Redis::hSet('blogs', $id, json_encode($blog));
+
+        $isLogin = false;
+
+        if (Auth::check()) {
+            $isLogin = true;
+        }
+
+        return view('blog.read_me', array('blog' => $blog, 'isLogin' => $isLogin));
+
     }
 
     /**

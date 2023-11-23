@@ -10,30 +10,23 @@
     <div class="container">
         <div class="card">
             <div class="card-header">
-                Login
+                @if($isLogin)
+                <a href="{{route('auth.logout')}}" class="btn btn-danger">Logout</a>
+                @else
+                <a href="{{route('auth.login')}}" class="btn btn-success">Login</a>
                 <a href="{{route('auth.register')}}" class="btn btn-info">Kayıt Ol</a>
+                @endif
             </div>
             <div class="card-body">
-                <form action="{{route('auth.login.post')}}" method="post">
-                    @csrf
-                <div class="row">
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" name="email" id="email" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label for="password">Password</label>
-                        <input type="password" name="password" id="password" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label for="password_confirmation">Password Confirm</label>
-                        <input type="password" name="password_confirmation" id="password_confirmation" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-success">Login</button>
+                @foreach ($blogs as $item)
+                <div class="card">
+                    <div class="card-header" style="cursor: pointer;"><a href="{{route('main.read', ['id' => $item['id']])}}">{{$item['title']}}</a></div>
+                    <div class="card-body">
+                        {{$item['body']}}
                     </div>
                 </div>
-                </form>
+                @endforeach
+               
 
             </div>
         </div>
