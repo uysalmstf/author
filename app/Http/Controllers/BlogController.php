@@ -42,6 +42,37 @@ class BlogController extends Controller
 
     }
 
+    public function publish($id) {
+        $blog = Blog::find($id);
+
+        $blog->publish = ($blog->publish == 0) ? 1 : 0 ;
+
+        $blog->update();
+
+        $blog = Redis::hGet('blogs', $id);
+        $blog = json_decode($blog);
+
+        $blog->publish = ($blog->publish == 0) ? 1 : 0 ;
+
+        Redis::hSet('blogs', $id, json_encode($blog));
+
+        return redirect()->route('anasayfa');
+
+    }
+
+    public function destroy($id) {
+        $blog = Blog::find($id);
+
+        $blog->status = 0 ;
+
+        $blog->update();
+
+        $blog = Redis::hDel('blogs', $id);
+    
+        return redirect()->route('anasayfa');
+
+    }
+    
     public function edit_api(Request $request) {
 
         $validatedData = $request->validate([
@@ -148,28 +179,6 @@ class BlogController extends Controller
             return redirect('/');
         }
         return redirect('/');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
     }
 
     /**
