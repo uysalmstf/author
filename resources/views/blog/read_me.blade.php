@@ -70,6 +70,14 @@
                                 </div>
                             </div>
                             
+                            <div class="row">
+                                @if ($before > 0)
+                                    <a href="{{route('main.read', ['id' => $before])}}" class="btn btn-success">Önceki Blog</a>
+                                @endif
+                                @if ($after > 0)
+                                    <a href="{{route('main.read', ['id' => $after])}}" class="btn btn-danger">Sonraki Blog</a>
+                                @endif
+                            </div>
         
                     </div>
                 </div>

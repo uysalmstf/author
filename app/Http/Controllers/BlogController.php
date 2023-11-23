@@ -150,7 +150,21 @@ class BlogController extends Controller
             $isLogin = true;
         }
 
-        return view('blog.read_me', array('blog' => $blog, 'isLogin' => $isLogin));
+        $onceki = 0;
+        $sonraki = 0;
+        $oncekiBlog = Blog::where('status', 1)->where('publish', 1)->where('id', '<', $id)->orderBy('id', 'desc')->take(1)->get();
+        if(!empty($oncekiBlog) && count($oncekiBlog) > 0) {
+
+            $onceki = $oncekiBlog[0]->id;
+        }
+
+        $sonrakiBlog = Blog::where('status', 1)->where('publish', 1)->where('id', '>', $id)->orderBy('id', 'asc')->take(1)->get();
+        if(!empty($sonrakiBlog) && count($sonrakiBlog) > 0) {
+
+            $sonraki = $sonrakiBlog[0]->id;
+        }
+
+        return view('blog.read_me', array('blog' => $blog, 'isLogin' => $isLogin, 'before' => $onceki, 'after' => $sonraki));
 
     }
 
