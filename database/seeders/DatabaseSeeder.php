@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             BlogSeeder::class,
             VoteSeeder::class,
+            CustomUserSeeder::class,
             // Diğer seeder'ları buraya ekleyin
         ]);
     }

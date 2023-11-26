@@ -22,5 +22,6 @@ class UserSeeder extends Seeder
                     ->has(Vote::factory(5))
             )
             ->create();
+            
     }
 }
