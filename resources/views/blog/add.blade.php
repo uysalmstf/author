@@ -24,4 +24,3 @@
         </div>
 @endsection
        
-    @endsection
