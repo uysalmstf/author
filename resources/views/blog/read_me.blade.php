@@ -33,35 +33,35 @@
                                     <div class="stars rate" data-percent="0">
                                         <a
                                         @if ($isLogin)
-                                        href="http://localhost:8008/author/public/vote/<?=$blog->id?>/1"
+                                        href="{{route('vote', ['id' => $blog->id, 'vote' => 1])}}"
                                         @else
                                         href="#"    
                                         @endif
                                          title="awful">★</a>
                                         <a
                                         @if ($isLogin)
-                                        href="http://localhost:8008/author/public/vote/<?=$blog->id?>/2"
+                                        href="{{route('vote', ['id' => $blog->id, 'vote' => 2])}}"
                                         @else
                                         href="#"    
                                         @endif
                                          title="ok">★</a>
                                         <a
                                         @if ($isLogin)
-                                        href="http://localhost:8008/author/public/vote/<?=$blog->id?>/3"
+                                        href="{{route('vote', ['id' => $blog->id, 'vote' => 3])}}"
                                         @else
                                         href="#"    
                                         @endif
                                          title="good">★</a>
                                         <a
                                         @if ($isLogin)
-                                        href="http://localhost:8008/author/public/vote/<?=$blog->id?>/4"
+                                        href="{{route('vote', ['id' => $blog->id, 'vote' => 4])}}"
                                         @else
                                         href="#"    
                                         @endif
                                         title="great">★</a>
                                         <a
                                         @if ($isLogin)
-                                        href="http://localhost:8008/author/public/vote/<?=$blog->id?>/5"
+                                        href="{{route('vote', ['id' => $blog->id, 'vote' => 5])}}"
                                         @else
                                         href="#"    
                                         @endif

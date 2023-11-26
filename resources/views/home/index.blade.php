@@ -45,7 +45,7 @@
         <div class="container">
             <div class="card">
                 @if($create)
-                    <a href="blogs/add" class="btn btn-success">Add</a>
+                    <a href="{{route('add')}}" class="btn btn-success">Add</a>
                 @endif
                 <div class="card-header">Blog Listesi</div>
                 <div class="card-body">

@@ -39,14 +39,14 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/moderator', [HomeController::class, 'moderator'])->middleware(ModeratorMiddleware::class)->name('moderator');
     Route::get('/writer', [HomeController::class, 'writer'])->middleware(WriterMiddleware::class)->name('writer');
     Route::get('/reader', [HomeController::class, 'reader'])->name('reader');
-    Route::get('/blogs/add', [BlogController::class, 'add']);
-    Route::post('/blogs/create', [BlogController::class, 'create']);
+    Route::get('/blogs/add', [BlogController::class, 'add'])->name('add');
+    Route::post('/blogs/create', [BlogController::class, 'create'])->name('create');
     Route::get('/blogs/edit/{id}', [BlogController::class, 'edit'])->name('edit');
     Route::get('/blogs/publish/{id}', [BlogController::class, 'publish'])->name('publish');
     Route::get('/blogs/delete/{id}', [BlogController::class, 'destroy'])->name('delete');
-    Route::post('/blogs/update/{id}', [BlogController::class, 'update']);
+    Route::post('/blogs/update/{id}', [BlogController::class, 'update'])->name('update');
 
 
-    Route::get('/vote/{id}/{vote}', [VoteController::class, 'vote']);
+    Route::get('/vote/{id}/{vote}', [VoteController::class, 'vote'])->name('vote');
 
 });

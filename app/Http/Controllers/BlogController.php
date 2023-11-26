@@ -250,8 +250,6 @@ class BlogController extends Controller
         ]);
 
         $post = Blog::find($id);
-        $post->publish = $request->get('publish');
-        $post->status = $request->get('status');
         $post->update($validatedData);
         Redis::hSet('blogs', $post->id, json_encode($post));
         return redirect('/');

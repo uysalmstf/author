@@ -47,7 +47,7 @@
 
             <div class="card-header">Blog Ekleme</div>
             <div class="card-body">
-                <form action="http://localhost:8008/author/public/blogs/create" method="post">
+                <form action="{{route('create')}}" method="post">
                     @csrf
                     <div class="form-group">
                         <label for="title">Title</label>

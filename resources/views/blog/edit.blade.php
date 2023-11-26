@@ -47,7 +47,7 @@
             
             <div class="card-header">Blog Editleme</div>
             <div class="card-body">
-                <form action="http://localhost:8008/author/public/blogs/update/<?=$data->id?>" method="post">
+                <form action="{{route('update', ['id' => $data->id])}}" method="post">
                     @csrf
                     <div class="form-group">
                         <label for="title">Title</label>
@@ -57,20 +57,7 @@
                         <label for="title">Body</label>
                         <textarea name="body" class="form-control" cols="30" rows="10"><?=$data->body?></textarea>
                     </div>
-                    <div class="form-group">
-                        <label for="title">Publish</label>
-                        <select class="form-control" name="publish">
-                            <option value="0" @if($data->publish == 0) selected @endif>Yayında Değil</option>
-                            <option value="1" @if($data->publish == 1) selected @endif>Yayında</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="title">Status</label>
-                        <select class="form-control" name="status">
-                            <option value="0" @if($data->status == 0) selected @endif>Pasif</option>
-                            <option value="1" @if($data->status == 1) selected @endif>Aktif</option>
-                        </select>
-                    </div>
+                    
                     <div class="form-group">
                         <input type="hidden" name="id" value="<?=$data->id?>">
                         <button type="submit" class="btn btn-success">Edit</button>
